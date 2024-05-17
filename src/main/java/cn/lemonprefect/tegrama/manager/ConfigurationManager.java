@@ -13,7 +13,7 @@ public class ConfigurationManager{
 
     private static ConfigurationManager instance;
     private final CompositeConfiguration configuration;
-    private static final String envFilePath = System.getenv("TEGRAMA_PROPERTIES");
+    private static final String envFilePath = System.getProperty("TEGRAMA_PROPERTIES");
     private static final String resourceFilePath = "tegrama.properties";
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationManager.class);
 
@@ -21,10 +21,10 @@ public class ConfigurationManager{
         configuration = new CompositeConfiguration();
         Configurations configs = new Configurations();
 
-        configuration.addConfiguration(configs.properties(getClass().getClassLoader().getResource(resourceFilePath)));
-        logger.info("Preset Configuration file: {}", resourceFilePath);
         configuration.addConfiguration(configs.properties(envFilePath));
         logger.info("Local Configuration file: {}", envFilePath);
+        configuration.addConfiguration(configs.properties(getClass().getClassLoader().getResource(resourceFilePath)));
+        logger.info("Preset Configuration file: {}", resourceFilePath);
     }
 
     public static synchronized ConfigurationManager getInstance(){
